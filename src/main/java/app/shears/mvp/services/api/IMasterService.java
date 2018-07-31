@@ -16,5 +16,9 @@ public interface IMasterService {
 
     long count();
 
-    boolean exists(Master master);
+    boolean existsByLogin(String login);
+
+    boolean existsByLoginAndPassword(String login, String password);
+
+    Master findByLoginAndPassword(String login, String password);
 }

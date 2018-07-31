@@ -22,23 +22,31 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order {
 
+    public Order(Master master, Customer customer, Set<Service> services, String location,
+                 byte[] photoBefore, byte[] photoAfter, LocalDateTime dateTime) {
+        this.master = master;
+        this.customer = customer;
+        this.services = services;
+        this.location = location;
+        this.photoBefore = photoBefore;
+        this.photoAfter = photoAfter;
+        this.dateTime = dateTime;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonIgnore
-//    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "master_id", referencedColumnName = "id")
     private Master master;
 
     @JsonIgnore
-//    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    //    @JsonManagedReference
     @ManyToMany(mappedBy = "orders")
     private Set<Service> services = new HashSet<>();
 

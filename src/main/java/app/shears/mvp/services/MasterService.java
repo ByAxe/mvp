@@ -56,7 +56,17 @@ public class MasterService implements IMasterService {
     }
 
     @Override
-    public boolean exists(Master master) {
-        return masterRepository.existsByLoginAndPassword(master.getLogin(), master.getPassword());
+    public boolean existsByLogin(String login) {
+        return masterRepository.existsByLogin(login);
+    }
+
+    @Override
+    public boolean existsByLoginAndPassword(String login, String password) {
+        return masterRepository.existsByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public Master findByLoginAndPassword(String login, String password) {
+        return masterRepository.findByLoginAndPassword(login, password);
     }
 }

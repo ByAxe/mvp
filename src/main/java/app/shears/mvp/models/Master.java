@@ -25,10 +25,10 @@ public class Master {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //    @JsonBackReference
+
     @OneToMany(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Order> orders;
-    //    @JsonManagedReference
+
     @ManyToMany(mappedBy = "masters")
     private Set<Service> services = new HashSet<>();
 

@@ -1,6 +1,7 @@
 package app.shears.mvp;
 
 import app.shears.mvp.cores.enums.Gender;
+import app.shears.mvp.models.Customer;
 import app.shears.mvp.models.Master;
 import app.shears.mvp.services.api.IServiceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +21,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,19 +65,150 @@ public class MvpApplicationTests {
     public void findMaster() throws Exception {
         String id = "1";
 
-        mvc.perform(get("/master/" + id))
+        String master = mvc.perform(get("/master/" + id))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType));
+                .andExpect(content().contentType(contentType))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(master);
+
     }
 
     @Test
-    public void createMaster() throws Exception {
-        String masterJson = objectMapper.writeValueAsString(new Master(null, null, "login3", "password3", "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null, false, false, new BigDecimal(4.5)));
+    public void createThenFindAndDeleteMaster() throws Exception {
+        String login = "login3";
+        String password = "password3";
+        String masterJson = objectMapper.writeValueAsString(new Master(null, null, login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null, false, false, new BigDecimal(4.5)));
 
         mvc.perform(post("/master")
                 .contentType(contentType)
                 .content(masterJson))
                 .andExpect(status().isCreated());
+
+
+        String masterAsString = mvc.perform(get("/master/find")
+                .contentType(contentType)
+                .param("login", login)
+                .param("password", password))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Master master = objectMapper.readValue(masterAsString, Master.class);
+
+        mvc.perform(delete("/master/" + master.getId()))
+                .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void existsByLoginAndPasswordMaster() throws Exception {
+        String login = "login3";
+        String password = "password3";
+
+        String master = mvc.perform(get("/master")
+                .contentType(contentType)
+                .param("login", login)
+                .param("password", password))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(master);
+    }
+
+    @Test
+    public void existsByLoginMaster() throws Exception {
+        String login = "login3";
+
+        String master = mvc.perform(get("/master")
+                .contentType(contentType)
+                .param("login", login))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(master);
+    }
+
+
+    @Test
+    public void findCustomer() throws Exception {
+        String id = "1";
+
+        String customer = mvc.perform(get("/customer/" + id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(customer);
+
+    }
+
+    @Test
+    public void createThenFindAndDeleteCustomer() throws Exception {
+        String login = "login3";
+        String password = "password3";
+        String customerJson = objectMapper.writeValueAsString(new Customer(login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null));
+
+        mvc.perform(post("/customer")
+                .contentType(contentType)
+                .content(customerJson))
+                .andExpect(status().isCreated());
+
+
+        String contentAsString = mvc.perform(get("/customer/find")
+                .contentType(contentType)
+                .param("login", login)
+                .param("password", password))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Customer customer = objectMapper.readValue(contentAsString, Customer.class);
+
+        mvc.perform(delete("/customer/" + customer.getId()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void existsByLoginAndPasswordCustomer() throws Exception {
+        String login = "login3";
+        String password = "password3";
+
+        String customer = mvc.perform(get("/customer")
+                .contentType(contentType)
+                .param("login", login)
+                .param("password", password))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(customer);
+    }
+
+    @Test
+    public void existsByLoginCustomer() throws Exception {
+        String login = "login3";
+
+        String customer = mvc.perform(get("/customer")
+                .contentType(contentType)
+                .param("login", login))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(customer);
+    }
+
 
 }

@@ -19,11 +19,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "services", schema = "mvp")
-@SequenceGenerator(name = "services_id_seq", sequenceName = "services_id_seq", allocationSize = 1)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Service {
 
-    //    @JsonBackReference
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -33,7 +35,8 @@ public class Service {
             inverseJoinColumns = {@JoinColumn(name = "master_id", referencedColumnName = "id")}
     )
     Set<Master> masters = new HashSet<>();
-    //    @JsonBackReference
+
+
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -43,11 +46,6 @@ public class Service {
             inverseJoinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")}
     )
     Set<Order> orders = new HashSet<>();
-    @Id
-    @Column(unique = true, nullable = false)
-    @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "services_id_seq")
-    private Long id;
 
 
     public Service(String title, String description, BigDecimal price) {
@@ -55,7 +53,6 @@ public class Service {
         this.description = description;
         this.price = price;
     }
-
 
     @Column
     private String title;

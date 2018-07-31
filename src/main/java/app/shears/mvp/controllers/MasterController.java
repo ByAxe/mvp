@@ -36,6 +36,14 @@ public class MasterController {
         return new ResponseEntity<>(master, OK);
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<?> findOne(@RequestParam String login, @RequestParam String password) throws Exception {
+        Master master = masterService.findByLoginAndPassword(login, password);
+
+        return new ResponseEntity<>(master, OK);
+    }
+
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody Master master) {
@@ -58,9 +66,9 @@ public class MasterController {
         return new ResponseEntity<>(count, OK);
     }
 
-    @PutMapping("/exists")
-    public ResponseEntity<?> exists(@RequestBody Master master) throws Exception {
-        boolean exists = masterService.exists(master);
+    @GetMapping("/exists")
+    public ResponseEntity<?> exists(@RequestParam String login, @RequestParam String password) throws Exception {
+        boolean exists = masterService.existsByLoginAndPassword(login, password);
 
         return new ResponseEntity<>(exists, OK);
     }
