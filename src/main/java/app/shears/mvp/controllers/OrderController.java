@@ -48,6 +48,15 @@ public class OrderController {
         return new ResponseEntity<>(CREATED);
     }
 
+    @PostMapping(value = "/place", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> placeAnOrder(@RequestBody Order order) {
+        orderService.save(order);
+
+        return new ResponseEntity<>(CREATED);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
         orderService.delete(id);

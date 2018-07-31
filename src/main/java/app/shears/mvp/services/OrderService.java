@@ -36,6 +36,12 @@ public class OrderService implements IOrderService {
         orderRepository.save(order);
     }
 
+    public void placeAnOrder(Order order) throws Exception {
+        save(order);
+
+        // Create quartz job
+    }
+
     @Override
     public void delete(Long id) {
         orderRepository.deleteById(id);

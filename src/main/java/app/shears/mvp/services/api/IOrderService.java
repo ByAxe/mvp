@@ -17,4 +17,6 @@ public interface IOrderService {
     long count();
 
     boolean exists(Long id);
+
+    void placeAnOrder(Order order) throws Exception;
 }
