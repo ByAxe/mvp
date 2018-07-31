@@ -5,7 +5,7 @@ SET search_path TO mvp, public;
 
 DROP TABLE IF EXISTS mvp.customers;
 CREATE TABLE mvp.customers(
-  id BIGSERIAL,
+  id BIGSERIAL UNIQUE,
   login VARCHAR,
   password VARCHAR,
   name VARCHAR ,
@@ -19,7 +19,7 @@ CREATE TABLE mvp.customers(
 
 DROP TABLE IF EXISTS mvp.masters;
 CREATE TABLE mvp.masters(
-  id BIGSERIAL,
+  id BIGSERIAL UNIQUE ,
   login VARCHAR,
   password VARCHAR,
   name VARCHAR ,
@@ -36,7 +36,7 @@ CREATE TABLE mvp.masters(
 
 DROP TABLE IF EXISTS mvp.services;
 CREATE TABLE mvp.services(
-  id BIGSERIAL,
+  id BIGSERIAL UNIQUE ,
   title VARCHAR,
   description TEXT,
   price DECIMAL,
@@ -45,9 +45,9 @@ CREATE TABLE mvp.services(
 
 DROP TABLE IF EXISTS mvp.orders;
 CREATE TABLE mvp.orders(
-  id BIGSERIAL,
-  customer_id bigint,
-  master_id bigint,
+  id BIGSERIAL UNIQUE,
+  customer_id bigint REFERENCES mvp.customers (id),
+  master_id bigint REFERENCES mvp.masters (id),
   location TEXT,
   photo_before BYTEA,
   photo_after BYTEA,
@@ -57,14 +57,14 @@ CREATE TABLE mvp.orders(
 
 DROP TABLE IF EXISTS mvp.masters_services;
 CREATE TABLE mvp.masters_services(
-  master_id bigint,
-  service_id bigint,
+  master_id bigint REFERENCES mvp.masters (id),
+  service_id bigint REFERENCES mvp.services (id),
   PRIMARY KEY (master_id, service_id)
 );
 
 DROP TABLE IF EXISTS mvp.orders_services;
 CREATE TABLE mvp.orders_services(
-  order_id bigint,
-  service_id bigint,
+  order_id bigint REFERENCES mvp.orders (id),
+  service_id bigint REFERENCES mvp.services (id),
   PRIMARY KEY (order_id, service_id)
 );

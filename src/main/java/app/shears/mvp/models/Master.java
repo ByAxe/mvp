@@ -2,6 +2,7 @@ package app.shears.mvp.models;
 
 import app.shears.mvp.cores.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -29,6 +31,10 @@ public class Master {
     @JsonBackReference
     @OneToMany(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Order> orders;
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "masters")
+    private Set<Service> services = new HashSet<>();
 
     @Column
     private String login;
