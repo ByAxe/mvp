@@ -16,13 +16,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "customers", schema = "mvp")
-@SequenceGenerator(name = "customer_id_seq", sequenceName = "customer_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "customers_id_seq", sequenceName = "customers_id_seq", allocationSize = 1)
 public class Customer {
 
     @Id
     @Column(unique = true, nullable = false)
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customers_id_seq")
     private Long id;
 
     @JsonBackReference

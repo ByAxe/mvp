@@ -1,6 +1,8 @@
 package app.shears.mvp.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +19,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "services", schema = "mvp")
-@SequenceGenerator(name = "service_id_seq", sequenceName = "service_id_seq", allocationSize = 1)
+@SequenceGenerator(name = "services_id_seq", sequenceName = "services_id_seq", allocationSize = 1)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Service {
 
-    @JsonBackReference
+    //    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             schema = "mvp",
@@ -29,7 +33,8 @@ public class Service {
             inverseJoinColumns = {@JoinColumn(name = "master_id", referencedColumnName = "id")}
     )
     Set<Master> masters = new HashSet<>();
-    @JsonBackReference
+    //    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             schema = "mvp",
@@ -41,8 +46,17 @@ public class Service {
     @Id
     @Column(unique = true, nullable = false)
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "services_id_seq")
     private Long id;
+
+
+    public Service(String title, String description, BigDecimal price) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
+
+
     @Column
     private String title;
 

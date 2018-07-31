@@ -1,6 +1,8 @@
 package app.shears.mvp.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,26 +19,26 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "orders", schema = "mvp")
-@SequenceGenerator(name = "order_id_seq", sequenceName = "order_id_seq", allocationSize = 1)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order {
 
     @Id
-    @Column(unique = true, nullable = false)
-    @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
+    @JsonIgnore
+//    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "master_id", referencedColumnName = "id")
     private Master master;
 
-    @JsonManagedReference
+    @JsonIgnore
+//    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @JsonManagedReference
+    //    @JsonManagedReference
     @ManyToMany(mappedBy = "orders")
     private Set<Service> services = new HashSet<>();
 
