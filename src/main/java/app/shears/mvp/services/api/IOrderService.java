@@ -8,4 +8,13 @@ public interface IOrderService {
 
     List<Order> findAll();
 
+    Order findOne(Long id) throws Exception;
+
+    void save(Order order);
+
+    void delete(Long id);
+
+    long count();
+
+    boolean exists(Long id);
 }

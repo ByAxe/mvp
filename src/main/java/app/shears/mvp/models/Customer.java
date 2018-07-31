@@ -23,6 +23,24 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Order> orders;
+    @Column
+    private String login;
+    @Column
+    private String password;
+    @Column
+    private String name;
+    @Column
+    private String phone;
+    @Column
+    private String email;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @Column
+    private Integer age;
+    @Column
+    private byte[] photo;
 
     public Customer(String login, String password, String name, String phone,
                     String email, Gender gender, Integer age, byte[] photo) {
@@ -35,33 +53,6 @@ public class Customer {
         this.age = age;
         this.photo = photo;
     }
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Order> orders;
-
-    @Column
-    private String login;
-
-    @Column
-    private String password;
-
-    @Column
-    private String name;
-
-    @Column
-    private String phone;
-
-    @Column
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Column
-    private Integer age;
-
-    @Column
-    private byte[] photo;
 
 
 }

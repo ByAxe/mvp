@@ -3,7 +3,6 @@ package app.shears.mvp.services;
 import app.shears.mvp.models.Master;
 import app.shears.mvp.repositories.MasterRepository;
 import app.shears.mvp.services.api.IMasterService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +30,7 @@ public class MasterService implements IMasterService {
     public Master findOne(Long id) throws Exception {
         Optional<Master> masterOptional = masterRepository.findById(id);
 
-        if (masterOptional.isPresent()) {
-            return masterOptional.get();
-        } else {
-            throw new NotFoundException("Master");
-        }
+        return masterOptional.orElse(null);
     }
 
     @Override

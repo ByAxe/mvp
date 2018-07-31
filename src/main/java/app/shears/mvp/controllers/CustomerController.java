@@ -33,8 +33,11 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) throws Exception {
         Customer customer = customerService.findOne(id);
-
-        return new ResponseEntity<>(customer, OK);
+        if (customer != null) {
+            return new ResponseEntity<>(customer, OK);
+        } else {
+            return new ResponseEntity<>(NO_CONTENT);
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -22,10 +22,6 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Service {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -35,8 +31,6 @@ public class Service {
             inverseJoinColumns = {@JoinColumn(name = "master_id", referencedColumnName = "id")}
     )
     Set<Master> masters = new HashSet<>();
-
-
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -46,20 +40,19 @@ public class Service {
             inverseJoinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")}
     )
     Set<Order> orders = new HashSet<>();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
+    private String title;
+    @Column
+    private String description;
+    @Column
+    private BigDecimal price;
 
     public Service(String title, String description, BigDecimal price) {
         this.title = title;
         this.description = description;
         this.price = price;
     }
-
-    @Column
-    private String title;
-
-    @Column
-    private String description;
-
-    @Column
-    private BigDecimal price;
 }

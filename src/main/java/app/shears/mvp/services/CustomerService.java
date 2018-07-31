@@ -3,7 +3,6 @@ package app.shears.mvp.services;
 import app.shears.mvp.models.Customer;
 import app.shears.mvp.repositories.CustomerRepository;
 import app.shears.mvp.services.api.ICustomerService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +27,7 @@ public class CustomerService implements ICustomerService {
     public Customer findOne(Long id) throws Exception {
         Optional<Customer> customerOptional = customerRepository.findById(id);
 
-        if (customerOptional.isPresent()) {
-            return customerOptional.get();
-        } else {
-            throw new NotFoundException("Customer");
-        }
+        return customerOptional.orElse(null);
     }
 
     @Override

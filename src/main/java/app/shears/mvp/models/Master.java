@@ -31,6 +31,28 @@ public class Master {
 
     @ManyToMany(mappedBy = "masters")
     private Set<Service> services = new HashSet<>();
+    @Column
+    private String login;
+    @Column
+    private String password;
+    @Column
+    private String name;
+    @Column
+    private String phone;
+    @Column
+    private String email;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @Column
+    private Integer age;
+    @Column
+    private byte[] photo;
+    @Column(name = "active")
+    private boolean isActive;
+    @Column(name = "busy")
+    private boolean isBusy;
+    @Column(name = "rank")
+    private BigDecimal rank;
 
     public Master(Set<Order> orders, Set<Service> services, String login,
                   String password, String name, String phone,
@@ -50,37 +72,4 @@ public class Master {
         this.isBusy = isBusy;
         this.rank = rank;
     }
-
-    @Column
-    private String login;
-
-    @Column
-    private String password;
-
-    @Column
-    private String name;
-
-    @Column
-    private String phone;
-
-    @Column
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Column
-    private Integer age;
-
-    @Column
-    private byte[] photo;
-
-    @Column(name = "active")
-    private boolean isActive;
-
-    @Column(name = "busy")
-    private boolean isBusy;
-
-    @Column(name = "rank")
-    private BigDecimal rank;
 }

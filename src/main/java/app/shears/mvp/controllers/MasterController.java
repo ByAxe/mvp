@@ -32,8 +32,11 @@ public class MasterController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) throws Exception {
         Master master = masterService.findOne(id);
-
-        return new ResponseEntity<>(master, OK);
+        if (master != null) {
+            return new ResponseEntity<>(master, OK);
+        } else {
+            return new ResponseEntity<>(NO_CONTENT);
+        }
     }
 
     @GetMapping("/find")

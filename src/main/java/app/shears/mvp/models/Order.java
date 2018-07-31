@@ -22,6 +22,28 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "master_id", referencedColumnName = "id")
+    private Master master;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
+    @ManyToMany(mappedBy = "orders")
+    private Set<Service> services = new HashSet<>();
+    @Column
+    private String location;
+    @Column(name = "photo_before")
+    private byte[] photoBefore;
+    @Column(name = "photo_after")
+    private byte[] photoAfter;
+    @Column(name = "date_time")
+    private LocalDateTime dateTime;
+
     public Order(Master master, Customer customer, Set<Service> services, String location,
                  byte[] photoBefore, byte[] photoAfter, LocalDateTime dateTime) {
         this.master = master;
@@ -32,33 +54,4 @@ public class Order {
         this.photoAfter = photoAfter;
         this.dateTime = dateTime;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "master_id", referencedColumnName = "id")
-    private Master master;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Customer customer;
-
-    @ManyToMany(mappedBy = "orders")
-    private Set<Service> services = new HashSet<>();
-
-    @Column
-    private String location;
-
-    @Column(name = "photo_before")
-    private byte[] photoBefore;
-
-    @Column(name = "photo_after")
-    private byte[] photoAfter;
-
-    @Column(name = "date_time")
-    private LocalDateTime dateTime;
 }
