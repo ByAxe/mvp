@@ -30,7 +30,7 @@ CREATE TABLE mvp.masters(
   photo BYTEA,
   active BOOLEAN,
   busy BOOLEAN,
-  rank FLOAT,
+  rank DECIMAL,
   PRIMARY KEY (login, password)
 );
 

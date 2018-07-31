@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
@@ -15,18 +16,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customers", schema = "mvp")
-@SequenceGenerator(name = "customer_id_seq", sequenceName = "customer_id_seq", allocationSize = 1)
-public class Customer {
+@Table(name = "masters", schema = "mvp")
+@SequenceGenerator(name = "master_id_seq", sequenceName = "master_id_seq", allocationSize = 1)
+public class Master {
 
     @Id
     @Column(unique = true, nullable = false)
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "master_id_seq")
     private Long id;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     @Column
@@ -53,5 +54,12 @@ public class Customer {
     @Column
     private byte[] photo;
 
+    @Column(name = "active")
+    private boolean isActive;
 
+    @Column(name = "busy")
+    private boolean isBusy;
+
+    @Column(name = "rank")
+    private BigDecimal rank;
 }
