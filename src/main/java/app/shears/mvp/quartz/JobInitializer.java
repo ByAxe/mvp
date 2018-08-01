@@ -6,6 +6,7 @@ import app.shears.mvp.quartz.jobs.PlaceOrderJob;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -32,6 +33,7 @@ public class JobInitializer implements ApplicationListener<ContextRefreshedEvent
     private ObjectMapper objectMapper;
 
     @Autowired
+    @Qualifier("mySchedulerFactory")
     private SchedulerFactoryBean schedulerFactoryBean;
 
     @Override

@@ -11,10 +11,6 @@
         <!-- Quartz requires a separate 'quartz.properties' file -->
         <property name="configLocation" value="classpath:application.properties"/>
 
-        <!-- Naturally, Quartz with the DB requires references to the data source and transaction manager beans -->
-        <property name="dataSource" ref="dataSource"/>
-        <property name="transactionManager" ref="transactionManager"/>
-
         <!-- reference to our 'autowiring job factory bean', defined above: -->
         <property name="jobFactory" ref="quartzJobFactory"/>
 
@@ -41,7 +37,6 @@
                 </prop>
             </props>
         </property>
-        <!--<property name="triggers" ref="quartzTriggers"/>-->
     </bean>
 
 </beans>

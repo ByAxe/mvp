@@ -50,8 +50,8 @@ public class OrderController {
 
     @PostMapping(value = "/place", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> placeAnOrder(@RequestBody Order order) {
-        orderService.save(order);
+    public ResponseEntity<?> placeAnOrder(@RequestBody Order order) throws Exception {
+        orderService.placeAnOrder(order);
 
         return new ResponseEntity<>(CREATED);
     }

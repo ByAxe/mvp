@@ -18,6 +18,6 @@ public class PlaceOrderJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap map = context.getMergedJobDataMap();
-        System.out.format("Map: [%s]\n", map.getWrappedMap());
+        System.out.println("Hello from PlaceOrderJob!");
     }
 }

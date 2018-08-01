@@ -3,7 +3,10 @@ package app.shears.mvp;
 import app.shears.mvp.cores.enums.Gender;
 import app.shears.mvp.models.Customer;
 import app.shears.mvp.models.Master;
+import app.shears.mvp.models.Order;
+import app.shears.mvp.models.Service;
 import app.shears.mvp.services.api.IServiceService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -45,6 +51,13 @@ public class MvpApplicationTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final String login = "login3";
+    private final String password = "password3";
+
+    private final Customer testCustomer = new Customer(login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null);
+    private final Master testMaster = new Master(null, null, login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null, false, false, new BigDecimal(4.5));
+
 
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
@@ -78,9 +91,7 @@ public class MvpApplicationTests {
 
     @Test
     public void createThenFindAndDeleteMaster() throws Exception {
-        String login = "login3";
-        String password = "password3";
-        String masterJson = objectMapper.writeValueAsString(new Master(null, null, login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null, false, false, new BigDecimal(4.5)));
+        String masterJson = objectMapper.writeValueAsString(testMaster);
 
         mvc.perform(post("/master")
                 .contentType(contentType)
@@ -105,9 +116,6 @@ public class MvpApplicationTests {
 
     @Test
     public void existsByLoginAndPasswordMaster() throws Exception {
-        String login = "login3";
-        String password = "password3";
-
         String master = mvc.perform(get("/master")
                 .contentType(contentType)
                 .param("login", login)
@@ -151,18 +159,16 @@ public class MvpApplicationTests {
 
     }
 
-    @Test
-    public void createThenFindAndDeleteCustomer() throws Exception {
-        String login = "login3";
-        String password = "password3";
-        String customerJson = objectMapper.writeValueAsString(new Customer(login, password, "New Username", "+375-25-345245234", "email", Gender.UNDEFINED, 99, null));
+    private void createCustomer(Customer customer) throws Exception {
+        String customerJson = objectMapper.writeValueAsString(testCustomer);
 
         mvc.perform(post("/customer")
                 .contentType(contentType)
                 .content(customerJson))
                 .andExpect(status().isCreated());
+    }
 
-
+    private Customer findCustomer(String login, String password) throws Exception {
         String contentAsString = mvc.perform(get("/customer/find")
                 .contentType(contentType)
                 .param("login", login)
@@ -173,9 +179,19 @@ public class MvpApplicationTests {
                 .getContentAsString();
 
         Customer customer = objectMapper.readValue(contentAsString, Customer.class);
+        return customer;
+    }
 
-        mvc.perform(delete("/customer/" + customer.getId()))
+    private void deleteCustomer(Long id) throws Exception {
+        mvc.perform(delete("/customer/" + id))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void createThenFindAndDeleteCustomer() throws Exception {
+        createCustomer(testCustomer);
+        Customer customer = findCustomer(login, password);
+        deleteCustomer(customer.getId());
     }
 
     @Test
@@ -210,5 +226,43 @@ public class MvpApplicationTests {
         System.out.println(customer);
     }
 
+    @Test
+    public void createCustomerThenPlaceAnOrder() throws Exception {
 
+        // Create customer
+        createCustomer(testCustomer);
+        Customer customer = findCustomer(login, password);
+
+        // Place an order
+        Set<Service> services = findServices();
+
+        LocalDateTime orderDateTime = LocalDateTime.now().plus(15, ChronoUnit.SECONDS);
+
+        Order order = new Order(customer, services, "42.234134, 55.223447", orderDateTime);
+        String orderJson = objectMapper.writeValueAsString(order);
+
+        System.out.println(orderJson);
+
+        mvc.perform(post("/order/place")
+                .contentType(contentType)
+                .content(orderJson))
+                .andExpect(status().isCreated());
+
+        // Remove Customer
+        deleteCustomer(customer.getId());
+    }
+
+    //    @Test
+    public Set<Service> findServices() throws Exception {
+        String contentAsString = mvc.perform(get("/service")
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Set<Service> services = objectMapper.readValue(contentAsString, new TypeReference<Set<Service>>() {
+        });
+        return services;
+    }
 }

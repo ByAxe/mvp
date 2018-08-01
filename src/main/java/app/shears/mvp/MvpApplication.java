@@ -31,7 +31,7 @@ public class MvpApplication {
         SpringApplication.run(MvpApplication.class, args);
     }
 
-    @Bean
+    @Bean("mySchedulerFactory")
     public SchedulerFactoryBean schedulerFactory(ApplicationContext applicationContext) {
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
         AutowiringSpingBeanJobFactory jobFactory = new AutowiringSpingBeanJobFactory();

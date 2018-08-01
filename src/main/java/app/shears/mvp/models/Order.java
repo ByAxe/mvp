@@ -54,4 +54,11 @@ public class Order {
         this.photoAfter = photoAfter;
         this.dateTime = dateTime;
     }
+
+    public Order(Customer customer, Set<Service> services, String location, LocalDateTime dateTime) {
+        this.customer = customer;
+        this.services = services;
+        this.location = location;
+        this.dateTime = dateTime;
+    }
 }
