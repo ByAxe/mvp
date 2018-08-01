@@ -56,6 +56,12 @@ public class OrderController {
         return new ResponseEntity<>(CREATED);
     }
 
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelAnOrder(@PathVariable Long id) {
+        orderService.cancel(id);
+
+        return new ResponseEntity<>(NO_CONTENT);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {

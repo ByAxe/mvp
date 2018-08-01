@@ -1,6 +1,7 @@
 package app.shears.mvp.services;
 
 import app.shears.mvp.models.Order;
+import app.shears.mvp.quartz.JobInitializer;
 import app.shears.mvp.repositories.OrderRepository;
 import app.shears.mvp.services.api.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import java.util.Optional;
 @Service
 public class OrderService implements IOrderService {
 
+    private final JobInitializer jobInitializer;
     private final OrderRepository orderRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, JobInitializer jobInitializer) {
         this.orderRepository = orderRepository;
+        this.jobInitializer = jobInitializer;
     }
 
     @Override
@@ -40,6 +43,13 @@ public class OrderService implements IOrderService {
         save(order);
 
         // Create quartz job
+        jobInitializer.placeOrderJob(order);
+    }
+
+    @Override
+    public void cancel(Long id) {
+        // Remove quartz job
+        jobInitializer.removeJobGroup(id);
     }
 
     @Override

@@ -14,6 +14,8 @@ public interface IOrderService {
 
     void delete(Long id);
 
+    void cancel(Long id);
+
     long count();
 
     boolean exists(Long id);
