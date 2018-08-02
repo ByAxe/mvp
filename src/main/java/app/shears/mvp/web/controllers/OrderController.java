@@ -1,4 +1,4 @@
-package app.shears.mvp.controllers;
+package app.shears.mvp.web.controllers;
 
 import app.shears.mvp.models.Order;
 import app.shears.mvp.services.api.IOrderService;
